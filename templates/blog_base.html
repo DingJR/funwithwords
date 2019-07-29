@@ -1,0 +1,52 @@
+<!-- blog_base.html -->
+<!DOCTYPE html>
+<html>
+	<head>
+		{% include 'import.html' %}
+		<title>
+			{% block title %} {% endblock %}
+		</title>
+	</head>
+	<body style = "padding-top:40px">
+		<div class='panel panel-default'>
+                        <div class='panel-header'>
+                        {% include 'header.html' %}
+                        </div>
+                </div>
+		<div class='container-fluid' >
+		<div class='row'>
+			{% if request.session.is_login %}
+			<div class='col-sm-3 col-md-3'>
+			    <div class='panel panel-default'>
+				<div class='panel-heading'>
+					<h3>
+						Menu
+					</h3>
+				<div class="list-group">
+  					<a class="list-group-item" href="/"><i class="fa fa-search fa-fw"></i>&nbsp;查询</a>
+  					<a class="list-group-item" href="/blog/mypost/"><i class="fa fa-home fa-fw"></i>&nbsp;我的文章</a>
+  					<a class="list-group-item" href="/blog/edit/"><i class="fa fa-edit fa-fw"></i>&nbsp;写文章</a>
+  					<a class="list-group-item" href="/blog/community/"><i class="fa fa-file-text-o fa-fw"></i>&nbsp;看文章</a>
+				</div>
+
+				</div>
+			    </div>
+			</div>
+			{% endif %}
+			<div class = 'col-sm-9 col-md-9'>
+			    <div class='panel panel-default'>
+				<div class='panel-heading'>
+					{% block headmessage %} {% endblock %}
+				</div>
+				<div class='panel-body'>
+					{% block content %} {% endblock %}
+				</div>
+			    </div>
+			</div>
+		</div>
+		</div>
+		<br>
+		<br>
+		{% include 'footer.html' %}
+	</body>
+</html>

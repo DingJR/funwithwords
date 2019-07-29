@@ -1,0 +1,54 @@
+<!-- etyma.html -->
+{% extends 'etyma_base.html' %}
+{% block title %} {{ post.title }}{% endblock %}
+{% block headmessage %}
+	<h3 style ='font-family:微软雅黑; font-size:16pt; font-weight:bold;'>社区文章列表</h3>
+{% endblock %}
+{% block content %}
+<script>
+	{% if message %}
+        $(document).ready(function(){
+		alert('{{message}}');
+        });
+        {% endif %}
+
+        $(document).ready(function(){
+		GoPage(1);
+        });
+        $(document).ready(function(){
+		$("tr:odd").css("background-color","#efefef");
+		$("tr:even").css("background-color","#FFFFFF");
+        });
+
+</script>
+<div id='rootCategory' class='trans-wrapper'>
+	<br><br>
+    <table class="table table-condensed" style="table-layout:fixed">
+  	<caption>词根仓库</caption>
+  	<thead>
+    		<tr>
+      			<th width='30'>词根类别</th>
+      			<th width='40'>解释</th>
+      			<th width='100'>例词</th>
+		</tr>
+  	</thead>
+  	<tbody id="PageBreak">
+		{% load mytags %}
+		{% for ele in categorys %}
+    		<tr>
+			<td width="40"><a href="/etyma/category/{{ele.e_meaning}}">{{ ele.e_meaning }}</a></td>
+			<td width="50">{{ ele.c_meaning }}</td>
+			<td width="100" class='wordlink'>
+			{% for i in categorywords|hash:ele.e_meaning %}
+			<a href="/etyma/{{ i }}">{{ i }}</a><span>;</span>
+			{% endfor %}
+			</td>
+		</tr>
+		{% endfor %}
+  	</tbody>
+    </table>
+    <div id='PageBreaker'></div>
+</div>
+<br><br><br>
+{% endblock %}
+		

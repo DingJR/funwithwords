@@ -1,0 +1,207 @@
+<!-- modify.html -->
+{% extends 'base.html' %}
+{% block title %} {{ post.title }}{% endblock %}
+{% block headmessage %}
+	<h3 style ='font-family:微软雅黑; font-size:16pt; font-weight:bold;'>社区文章列表</h3>
+{% endblock %}
+{% block content %}
+<style>
+#id_word{
+	border-radius:5px ;
+	height:30px;
+	width:200px;
+}
+#id_root{
+	border-radius:5px ;
+	height:30px;
+	width:200px;
+}
+#id_e_meaning{
+	border-radius:5px ;
+	width:700px;
+	height:30px;
+}
+#id_c_meaning{
+	border-radius:0 5px ;
+	width:700px;
+	height:30px;
+}
+#id_helper{
+	border-radius:0 5px ;
+	width:700px;
+	height:30px;
+}
+#id_function{
+	border-radius:0 5px ;
+	width:700px;
+	height:30px;
+}
+#id_meaning{
+	border-radius:5px ;
+	width:700px;
+	height:30px;
+}
+#id_words{
+	border-radius:5px ;
+	width:700px;
+	height:30px;
+}
+#id_origin{
+	border-radius:5px ;
+	width:200px;
+	height:30px;
+}
+</style>
+<script>
+  modifyType = 'word';
+  selectedObj= '';
+  selectedWord='';
+	$(document).ready(function(){
+    displayForm = document.getElementsByName('WordModify')[0];
+    displayForm.action = '\\modify\\' + modifyType;
+      console.log(displayForm.action)
+		$("#modifyType").change(function(){
+      var mt = $('#modifyType').val();
+      var displayForm = '';
+      var hideForm = '';
+      if(mt=='word')
+      { 
+        displayForm = document.getElementsByName('WordModify')[0];
+        hideForm    = document.getElementsByName('RootModify')[0];
+        displayForm.action = '\\modify\\' + mt;
+      }
+      else
+      { 
+        displayForm = document.getElementsByName('RootModify')[0];
+        hideForm    = document.getElementsByName('WordModify')[0];
+        displayForm.action = '\\modify\\' + mt;
+      }
+      console.log(displayForm.action)
+      modifyType = mt;
+      displayForm.style='display:block'; 
+      hideForm.style   ='display:none'; 
+		})
+	});
+	$(document).ready(function(){
+		$("#id_word").keyup(function(){
+       var word = document.getElementById("id_word");
+       loadword(word,'word');
+		})
+		$("#id_root").keyup(function(){
+       var root = document.getElementById("id_root");
+       loadword(root,'root');
+		})
+		$("#id_word").blur(function(){
+       selectedWord = $("#id_word").val();
+       loadinfo(selectedWord);
+		})
+		$("#id_root").blur(function(){
+       selectedWord = $("#id_root").val();
+       loadinfo(selectedWord);
+		})
+	});
+  function loadword(name,searchtype){
+      var searchform = "#" + name.getAttribute('id');
+    console.log(searchform);
+      $.ajax({
+             url : "/getModifyWord/",
+             type : "post",
+             data : {localName : $(searchform).val(),"searchType":modifyType},
+             dataType : "json",
+             success: function( jsonData ) {
+                var data = eval(jsonData);
+                var context = [];
+                $.map( data, function( item ) {
+                        var name = item.localName;
+                        context.push(name);
+                });
+                $(searchform).html(""); 
+                $(searchform).autocomplete({
+                        source: context,
+                });
+              }
+             });
+      }
+      function loadinfo(obj){
+             $.ajax({
+                   url : "/getModifyWordInfo/",
+                   type : "post",
+                   data : {localName:selectedWord,"searchType":modifyType,"root":"","e_meaning":"","c_meaning":"","helper":"","words":"","source":""},
+                   dataType : "json",
+                   success: function( jsonData ) {
+console.log(obj,jsonData);
+                     var selectedObj = eval(jsonData);
+                  if(modifyType == 'word')
+                    {
+			               $("#id_c_meaning").val(selectedObj.e_meaning);
+			               $("#id_e_meaning").val(selectedObj.c_meaning);
+			               $("#id_words").val(selectedObj.words);
+			               $("#id_source").val(selectedObj.source);
+			               $("#id_helper").val(selectedObj.helper);
+                    }
+                    else{
+			               $("#id_meaning").val(selectedObj.meaning);
+			               $("#id_words").val(selectedObj.words);
+			               $("#id_origin").val(selectedObj.origin);
+			               $("#id_function").val(selectedObj.function);
+                    }
+                   }
+                    })
+      }
+	{% if message %}
+        $(document).ready(function(){
+                alert('{{message}}');
+        });
+        {% endif %}
+</script>
+<div>
+  <div class="row">
+    <div class="col-sm-1">
+    </div>
+    <div class="col-sm-3">
+      <select id='modifyType' class="selectpicker show-tick form-control" data-live-search="true" data-actions-box="true">
+        <option value='word'>修改单词</option>
+        <option value='prefix'>修改前缀</option>
+        <option value='suffix'>修改后缀</option>
+        <option value='root'>修改词根</option>
+      </select>
+    </div>
+  </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-sm-1">
+    </div>
+    <div class="col-sm-10">
+  <form name='WordModify' style='display:block' action='\modify\' method='POST'>
+	  word<br>
+	  {{ formWord.word}}<br><br>
+	  English meaning <br>
+	  {{ formWord.e_meaning}}<br><br>
+	  Chinese meaning<br>
+	  {{ formWord.c_meaning}}<br><br>
+	  Source<br>
+	  {{ formWord.source}}<br><br>
+	  Helper<br>
+	  {{ formWord.helper }}<br><br>
+	  <button type="submit button" class="wordmodify btn btn-info">提交</button>
+  </form>
+  <form name='RootModify' style='display:none'  action='\modify\' method='POST'>
+	  Root<br>
+	  {{ formRoot.root}}<br><br>
+	  Meaning<br>
+	  {{ formRoot.meaning}}<br><br>
+	  Derived Words<br>
+	  {{ formRoot.words}}<br><br>
+	  Origin<br>
+	  {{ formRoot.origin}}<br><br>
+	  Function<br>
+	  {{ formRoot.function}}<br><br>
+	  <button type="submit button" class="rootmodify btn btn-info">提交</button>
+  </form>
+    </div>
+</div>
+<br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br>
+{% endblock %}
+		

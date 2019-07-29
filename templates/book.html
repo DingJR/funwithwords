@@ -1,0 +1,101 @@
+<!-- book.html -->
+{% extends 'book_base.html' %}
+{% block content %}
+<script>
+	{% if message %}
+        $(document).ready(function(){
+		alert('{{message}}');
+        });
+        {% endif %}
+</script>
+  <br><br>
+	<div id='CurrentBook' class='trans-wrapper'>
+    <h3><span>正在学习</span></h3>
+      {% if currentBook %}
+        <div class='wall row'>
+              <br><br>
+			        <div class='col-sm-4 col-md-4'>
+                <div class='wordbook-cover'>
+                    <a href="/mywords/book/{{curBook.title}}">
+                  <img src="{{currentBook.url}}" class="img-rounded" alt="Cinque
+                  Terre" width="100" height="120">
+                    </a>
+	              </div>
+                <div class='wordbook-basicinfo span'>
+                  <div class='wordbook-title'>
+                    <span>单词书名: <a href="/mywords/book/{{curBook.title}}">{{curBook.title}}</a></span>
+	                </div>
+                  <div class='wordbook-wordnum'>
+                    <span>单词数量: {{currentBook.wordnum}}</span>
+	                </div>
+                  <div class='wordbook-degree'>
+                    <span>完成情况: {{currentBook.finishDegree}}%</span>
+	                </div>
+	              </div>
+	            </div>
+			      <div class='col-sm-8 col-md-8'>
+	          </div>
+	      </div>
+      {% endif %}
+	</div>
+  <hr>
+	<div id='MyBooks' class='trans-wrapper'>
+    <h3><span>我的收藏</span></h3>
+    <div class='walla row'>
+    <br><br>
+    {% for book in allbooks  %}
+			        <div class='col-sm-4 col-md-4'>
+                <div class='wordbook-cover'>
+                    <a href="/mywords/book/{{book.title}}">
+                  <img src="{{book.url}}" class="img-rounded" alt="Cinque
+                  Terre" width="100" height="120">
+                    </a>
+	              </div>
+                <div class='wordbook-basicinfo span'>
+                  <div class='wordbook-title'>
+                    <span>单词书名: <a href="/mywords/book/{{book.title}}">{{book.title}}</a></span>
+	                </div>
+                  <div class='wordbook-wordnum'>
+                    <span>单词数量: {{book.wordnum}}</span>
+	                </div>
+                  <div class='wordbook-degree'>
+                    <span>完成情况: {{book.finishDegree}}%</span>
+	                </div>
+	              </div>
+	            </div>
+    {% endfor %}
+	  </div>
+	</div>
+  <hr>
+	<div id='AllBook' class='trans-wrapper'>
+    <h3><span>单词书仓库</span></h3>
+    <div class='walla row'>
+    <br><br>
+    {% for book in categorybooks %}
+			        <div class='col-sm-4 col-md-4'>
+                <div class='wordbook-cover'>
+                    <a href="/mywords/book/{{book.title}}">
+                  <img src="{{book.url}}" class="img-rounded" alt="Cinque
+                  Terre" width="100" height="120">
+                    </a>
+	              </div>
+                <div class='wordbook-basicinfo span'>
+                  <div class='wordbook-title'>
+                    <span>单词书名: <a href="/mywords/book/{{book.title}}">{{book.title}}</a></span>
+	                </div>
+                  <div class='wordbook-wordnum'>
+                    <span>单词数量: {{book.wordnum}}</span>
+	                </div>
+                  <div class='wordbook-degree'>
+                    <span>发布时间: {{book.pub_date|date:"Y-m-d" }}</span>
+	                </div>
+	              </div>
+	            </div>
+       {% endfor %}
+	  </div>
+	</div>
+  <hr>
+	<br><br><br>
+	<br><br><br>
+{% endblock %}
+		

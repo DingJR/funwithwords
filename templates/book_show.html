@@ -1,0 +1,106 @@
+<!-- book_show.html -->
+{% extends 'bookshow_base.html' %}
+{% block content %}
+<script>
+	{% if message %}
+        $(document).ready(function(){
+		alert('{{message}}');
+        });
+        {% endif %}
+
+        $(document).ready(function(){
+		GoPage(1);
+        });
+        $(document).ready(function(){
+		$("tr:odd").css("background-color","#eee");
+		$("tr:even").css("background-color","#f9f9f9");
+        });
+
+</script>
+<style>
+#allwords{
+    border: 1px solid #ddd;
+    border-collapse: separate;
+    border-radius: 4px;
+}
+.wall{
+    border: 1px solid #ddd;
+    margin:2px;
+}
+#profile{
+    margin-top: 10px;
+    border-radius: 4px;
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+}
+.table thead tr th, .table tbody tr td{
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+}
+</style>
+    <div class='wall row'>
+      <br>
+		  <div class='col-sm-2 col-md-2'>
+       <div class='wordbook-cover'>
+           <a href="/mywords/book/{{book.title}}" >
+         <img src="{{book.image.url}}" class="thumbnail" alt="Cinque
+         Terre" width="100" height="120">
+           </a>
+	     </div>
+      </div>
+		  <div class='col-sm-6 col-md-6'>
+       <div class='wordbook-basicinfo span'>
+         <div class='wordbook-title'>
+           <span>单词书名: <a href="/mywords/book/{{book.title}}">{{book.title}}</a></span>
+	       </div>
+         <div class='wordbook-wordnum'>
+           <span>单词数量: {{words|length}}</span>
+	       </div>
+         <div class='wordbook-author'>
+           <span>单词作者: {{book.author}}</span>
+	       </div>
+         <div class='wordbook-pubdate'>
+           <span>创建时间: {{book.pub_date}}</span>
+	       </div>
+	     </div>
+      </div>
+		  <div class='col-sm-4 col-md-4'>
+        <a href = "/mywords/change/{{book.title}}">
+        <button type="button" class="btn btn-success">切换单词书</button>
+        </a>
+      </div>
+    </div>
+    <div id='profile' class='trans-wrapper'>
+           <span>单词书介绍: {{book.body}}</span>
+    </div>
+    <div id='wordbook' class='trans-wrapper'>
+	    <br>
+      <div id='allwords'>
+        <table class="table table-condensed" style="table-layout:fixed" >
+  	      <thead>
+    		    <tr>
+      			    <th width='40'>单词</th>
+      			    <th width='50'>汉语释义</th>
+      			    <th width='50'>英语释义</th>
+		        </tr>
+  	      </thead>
+  	      <tbody id="PageBreak" >
+		        {% load mytags %}
+		        {% for ele in words %}
+    	        <tr>
+			          <td width="40"><a href="/word?mainSearch={{ele.word}}">{{ ele.word}}</a></td>
+			          <td width="50">{{ ele.c_meaning}}</td>
+			          <td width="50">{{ ele.e_meaning}}</td>
+		          </tr>
+		        {% endfor %}
+  	      </tbody>
+        </table>
+      </div>
+      <div id='PageBreaker'></div>
+			</div>
+<br><br><br>
+{% endblock %}
+		

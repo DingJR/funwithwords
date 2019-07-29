@@ -1,0 +1,111 @@
+<!-- word.html -->
+{% extends 'word_base.html' %}
+{% block content %}
+<script>
+	{% if message %}
+        $(document).ready(function(){
+		alert('{{message}}');
+        });
+        {% endif %}
+</script>
+	<div id='PageWord'>
+	<h2><span>{{ word }}</span></h2>
+	</div>
+	<hr>
+	<div id='Explaination' class='trans-wrapper'>
+		<h3>
+	    	<span class='tabs'>
+			{% if result.c_meaning %}
+			<a href='javascript:void(0);' id='aHanTrans' class='tab-current' onclick='mytoggle(this,HanTransToggle)'><span>汉语释义</span></a>
+			{% endif %}
+			{% if result.e_meaning %}
+			<a href='javascript:void(0);' id='aEngTrans' class='' onclick='mytoggle(this,EngTransToggle)'><span>英语释义</span></a>
+			{% endif %}
+	    	</span>
+		</h3>
+		<br>
+		<div id='HanTransToggle' style=''>
+			{% for ele in result.c_meaning %}
+			<h4><span>{{ ele }}</span></h4>
+			{% endfor %}
+		</div>
+		<div id='EngTransToggle' style='display:none'>
+			{% for ele in result.e_meaning %}
+			<h4><span>{{ ele }}</span></h4>
+			{% endfor %}
+		</div>
+	</div>
+	<br><br><br>
+	<div id='Extension' class='trans-wrapper'>
+		<h3>
+	    	<span class='tabs'>
+			{% if result.source  %}
+			<a href='javascript:void(0);' id='aSource' class='tab-current' onclick='mytoggle(this,SourceToggle)'><span>词源故事</span></a>
+			{% endif %}
+			{% if result.helper %}
+			<a href='javascript:void(0);' id='aHelper' class='' onclick='mytoggle(this,HelperToggle)'><span>助记方法</span></a>
+			{% endif %}
+			{% if wordEtymaList %}
+			<a href='javascript:void(0);' id='aEtyma' class='' onclick='mytoggle(this,EtymaToggle)'><span>相关词根</span></a>
+			{% endif %}
+	    	</span>
+		</h3>
+		<br>
+		{% if result.source  %}
+		<div id='SourceToggle' style=''>
+			<h4><span>{{ result.source | linebreaksbr}}</span></h4>
+		</div>
+		{% endif %}
+		{% if result.helper %}
+		<div id='HelperToggle' style='display:none'>
+			<h4><span>{{ result.helper |linebreaksbr}}</span></h4>
+		</div>
+		{% endif %}
+		{% if wordEtymaList %}
+		<div id='EtymaToggle' style='display:none'>
+      {% for ele in wordEtymaList%} 
+        <h4><span>
+				  <a href="/etyma/{{ ele.root }}">{{ ele.root }} : </a>
+          {{ ele.meaning|linebreaksbr}}
+        </span></h4>
+      {% endfor %}
+		</div>
+		{% endif %}
+	</div>
+	<br><br><br>
+	<div id='sameclass' class='trans-wrapper'>
+		<h3>
+	    	<span class='tabs'>
+			{% if classWord %}
+			<a href='javascript:void(0);' id='aCategory' class='tab-current' onclick='mytoggle(this,CategoryToggle)'><span>近义词汇</span></a>
+			{% endif %}
+			{% if differ %}
+			<a href='javascript:void(0);' id='aDiffer' class='' onclick='mytoggle(this,DifferToggle)'><span>词汇辨析</span></a>
+			{% endif %}
+	    	</span>
+		</h3>
+		<br>
+		<div id='CategoryToggle' style=''>
+			<h4><span>
+			{% for i in classWord %}
+				<a href="/word?mainSearch={{ i }}">{{ i }};</a>
+			{% endfor %}
+			</span></h4>
+		</div>
+		<div id='DifferToggle' style='display:none'>
+			{{ differ|linebreaksbr}}
+		</div>
+	</div>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+{% endblock %}
+		

@@ -1,0 +1,19 @@
+<!-- index_base.html -->
+<!DOCTYPE html>
+<html>
+	<head>
+		{% include 'import.html' %}
+                <title>
+                        {% block title %} {% endblock %}
+                </title>
+	</head>
+	<body style = "padding-top:40px">
+		<div class='panel panel-default'>
+			<div class='panel-header'>
+			{% include 'header.html' %}
+			</div>
+		</div>
+			{% block content %} {% endblock %}
+			{% include 'footer.html' %}
+	</body>
+</html>

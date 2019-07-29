@@ -1,0 +1,14 @@
+<!-- login_base.html -->
+<!DOCTYPE html>
+<html>
+	<head>
+		{% include 'import.html' %}
+		<title>
+			{% block title %} {% endblock %}
+		</title>
+	</head>
+	<body style = "padding:60px">
+		{% include 'header.html' %}
+		{% block content %} {% endblock %}
+	</body>
+</html>

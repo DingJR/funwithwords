@@ -1,0 +1,10 @@
+.footer {
+    font-family: Palatino, "Palatino Linotype", "Book Antiqua", "Hoefler Text", Georgia, "Lucida Bright", Cambria, Times, "Times New Roman", serif;
+    background-color: rgb(220, 220, 220);
+    margin-top: 80px;
+    height : 80px;
+    color : rgb(40,40,40);
+    padding-top: 0px;
+    padding-left: 20px;
+    padding-bottom: 0px;
+}

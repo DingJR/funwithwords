@@ -1,0 +1,62 @@
+<!-- blog.html -->
+{% extends 'blog_base.html' %}
+{% block title %} {{ post.title }}{% endblock %}
+{% block headmessage %}
+	<h3 style ='font-family:微软雅黑; font-size:16pt; font-weight:bold;'>社区文章列表</h3>
+{% endblock %}
+{% block content %}
+<script>
+	function deletePost(id){
+		var deleEle = "#post" + id 
+		$(function(){
+			$(deleEle).hide()
+		});
+		$.ajax({
+		     url : "/blog/delete/",
+                     type : "post",
+                     data : {localName : id},
+                     dataType : "json",
+                     success: function( jsonData ) {
+                    }
+               });
+
+	}
+	{% if message %}
+        $(document).ready(function(){
+		alert('{{message}}');
+        });
+        {% endif %}
+</script>
+	{% for post in posts %}
+	<div class='panel panel-default' id="post{{post.id}}">
+	<div class='panel-heading'>
+		<p style ='font-family:微软雅黑; font-size:12pt; font-weight:bold;'>
+		<a href="/blog/community/{{post.author.name}}/{{post.slug}}">{{ post.title }}</a></p>
+	</div>
+	<div class='panel-body'  style='background-color:#ffffdd'>
+		{{ post.body | truncatechars:120 }}
+	</div>
+	<div class='panel-body' style='background-color:#efefef'>
+		<div class='row'>
+			<div class="col-lg-8" >
+				作者：<a href="/blog/community/{{ post.author.name }}">{{ post.author.name }}</a>
+				<br>
+				发表时间：{{ post.pub_date | date:"Y M d, h:m:s"}}
+				{{ session.user_id }}
+			</div>
+			<br>
+			{% if request.session.user_id == post.author.pk %}
+			<div class="col-lg-2 col-lg-offset-2" >
+				<a class="delete" onclick="deletePost({{post.id}})">
+				<i class="fa fa-trash-o"></i>&nbsp;删除</a>&nbsp;&nbsp;</a>
+				<a class="modify" href="/blog/modify/post{{post.id}}">
+				<i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+                        </div>
+			{% endif %}
+		</div>
+	</div>
+	</div>
+	<br><br><br>
+	{% endfor %}
+{% endblock %}
+		

@@ -1,0 +1,30 @@
+.wall{
+    background-color: #dff0d8;
+    border: 1px solid #e3e3e3;
+    color: #468847;
+    border-radius:4px;
+}
+.walla{
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    color: #468847;
+    border-radius:4px;
+}
+.wordbook-cover{
+    padding:2px 10px;
+　　display: block;
+　　max-width: 100%;
+}
+.wordbook-basicinfo{
+　　display: block;
+    padding:2px 10px;
+}
+.wordbook-title{
+    padding:3px 0px;
+}
+.wordbook-wordnum{
+    padding:2px 0px;
+}
+.wordbook-degree{
+    padding:2px 0px 30px 0px;
+}

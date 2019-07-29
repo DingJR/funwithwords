@@ -1,0 +1,52 @@
+h3{
+    font-size: 1.17em;
+    #font-weight: bold;
+    color:black;
+    font-size: 1.17em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    #font-weight: bold;
+}
+.trans-wrapper h3 {
+    font-size: 14px;
+    position: relative;
+    height: 26px;
+    line-height: 26px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0.7em;
+    margin-left: 0px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(221, 221, 221);
+}
+.tabs a, .tab-current {
+    color: #434343;
+    font-weight: normal;
+    text-decoration: none;
+    display: inline-block;
+    border-bottom-style: solid;
+    border-bottom-width: 4px;
+    border-bottom-color: #fff;
+    height: 20px;
+}
+.tabs a span, .tab-current span {
+    display: inline-block;
+    padding: 0 20px;
+    height: 26px;
+    border-bottom: 2px solid #bfbfbf;
+    margin-right: 2px;
+    cursor: pointer;
+    _position: relative;
+    _top: 2px;
+}
+.tabs a.tab-current span {
+    border-bottom: 2px solid #5fc4f3;
+    cursor: default;
+    color: #434343;
+    font-weight: bold;
+}
+
+

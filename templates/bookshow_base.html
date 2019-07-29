@@ -1,0 +1,50 @@
+<!-- bookshow_base.html -->
+<!DOCTYPE html>
+<html>
+	<head>
+		{% include 'import.html' %}
+		<title>
+			{% block title %} {% endblock %}
+		</title>
+	</head>
+<script>
+$(function(){
+	window.onhashchange=function(){
+		if (window.location.hash.indexOf('#') >= 0) {
+			console.log(window.location.hash);
+			console.log($(window.location.hash).offset().top);
+			console.log(window.location.hash);
+			console.log($(window.location.hash).offset());
+    			$('html,body').animate({
+        			scrollTop: ($(window.location.hash).offset().top - 70) + "px"
+    			},300);
+		}
+	};
+});
+</script>
+	<body style = "padding-top:40px; font-family: Arial,sans-serif;color: #434343;">
+		<div class='panel panel-default' id='TopElement'>
+          <div class='panel-header'>
+          {% include 'header.html' %}
+          </div>
+    </div>
+		<div class='col-sm-2 col-md-2' style="position:fixed;z-index:999;top:100px;left:0;;">
+			<div class="list-group">
+  				<a class="list-group-item" href="/mywords/review" class='anchor'>&nbsp;今日单词</a>
+  				<a class="list-group-item" href="/mywords/book" class='anchor'>&nbsp;单词书仓库</a>
+			</div>
+		</div>
+		<div class='container-fluid' >
+		<div class='row'>
+			<div class='col-sm-3 col-md-3'>
+			</div>
+			<div class = 'col-sm-7 col-md-7'>
+					{% block content %} {% endblock %}
+			</div>
+		</div>
+		</div>
+		<br>
+		<br>
+		{% include 'footer.html' %}
+	</body>
+</html>

@@ -1,0 +1,182 @@
+<!-- review.html -->
+{% extends 'review_base.html' %}
+{% block content %}
+<script>
+	{% if message %}
+        $(document).ready(function(){
+		      alert('{{message}}');
+        });
+  {% endif %}
+  var allwords  = '';
+  var num       =  0;
+  var wholeNum  =  0;
+  var curWord   =  '';
+  $(document).ready(function(){
+        $('#uploadModel').modal('toggle');
+        $.ajax({
+             url : "/mywords/getwords",
+             type : "post",
+             dataType : "json",
+             success: function( jsonData ) {
+                $('#uploadModel').modal('toggle');
+                allwords = eval(jsonData);
+                allwords = allwords['words'];
+                allwords = allwords.split(',');
+                allwords.splice(allwords.length - 1,1);
+                wholeNum = allwords.length;
+               console.log(allwords,num);
+                loadWord(num);
+             }
+        });
+  });
+  function loadWord(curNum){
+        $.ajax({
+             url : "/mywords/wordinfo",
+             type : "post",
+             data : {"localName":allwords[curNum]},
+             dataType : "json",
+             success: function( jsonData ) {
+                curWord = eval(jsonData);
+                $("#word-num").text((curNum+1).toString() + '/' + wholeNum.toString());
+                $("#word-word").html(curWord['word']);
+                $("#word-basic").html("英文释义: " + curWord['e_meaning']);
+                $("#word-basic").html($("#word-basic").html()+ "<br>");
+                $("#word-basic").html($("#word-basic").html()+ "中文释义: " + curWord['c_meaning']);
+                if(curWord['source'])
+                  $("#helper").val(curWord['source']);
+                else if(curWord['helper'])
+                  $("#helper").val(curWord['helper']);
+             }
+        });
+  }
+  function lastWord(){
+    if(num==1)
+      return ;
+    num = num - 1;
+    loadWord(num);
+  }
+  function nextWord(){
+    num = num + 1;
+    if(num == wholeNum)
+    {
+      $('#uploadModel').modal('toggle');
+      finishReview();
+      return ;
+    }
+    else if(num > wholeNum)
+      return;
+    else
+      loadWord(num);
+  }
+  function finishReview(){
+        $.ajax({
+             url : "/mywords/reviewFinish",
+             type : "post",
+             data : {"words":JSON.stringify(allwords),"curBook":"{{curBook.title}}"},
+             dataType : "json",
+             success: function( jsonData ) {
+               window.location.href="/mywords/book";
+              $('#uploadModel').modal('toggle');
+             }
+        });
+   
+  }
+</script>
+<style>
+i:hover{
+  background-color:#468847;
+  color:#eee;
+}
+.turnpage{
+  background-color:#eee;
+  color:#468847;
+  font-size: 10em;
+  border-radius: 4px;
+  padding:10px;
+}
+#helper{
+  background-color:#eee;
+  color:#468847;
+  border-radius: 4px;
+  width:400px;
+  height:200px;
+}
+#word-basic{
+  margin:15px;
+  padding:0px;
+  background-color: #f5f5f5;
+  border: 1px solid #e3e3e3;
+  color: #468847;
+  width:400px;
+  border-radius:4px;
+}
+
+</style>
+  <div class='container-fluid' >
+	<div class='row'>
+	<br><br><br>
+		<div class='col-sm-3 col-md-3' style="position:fixed;">
+      <center>
+        <div id='last'>
+          <a class='tp' onclick='lastWord()'>
+            <i class="turnpage fa fa-chevron-circle-left fa-5x" aria-hidden="true"></i>
+          </a>
+        </div>
+      </center>
+    </div>
+		<div class='col-sm-3 col-md-3'>
+    </div>
+		<div class='col-sm-6 col-md-6'>
+      <div id='word'>
+        <div class='row'>
+          <div class='col-sm-2 col-md-2'>
+          </div>
+          <div id='word-word' class='col-sm-6 col-md-6' style='font-size:20px'>
+          </div>
+          <div id='word-num' class='col-sm-4 col-md-4' style='font-size:20px'>
+          </div>
+        </div>
+        <hr>
+        <div class='row'>
+          <div class='col-sm-2 col-md-2'>
+            <span>基本释义</span>
+          </div>
+          <div id='word-basic' class='col-sm-9 col-md-9'>
+          </div>
+        </div>
+        <hr>
+        <div class='row'>
+          <div class='col-sm-2 col-md-2'>
+           <span>助记方法</span>
+          </div>
+          <div id='word-helper' class='col-sm-9 col-md-9'>
+            <textarea id="helper" value="" style=""></textarea>
+          </div>
+        </div>
+        <hr>
+      </div>
+    </div>
+		<div class='col-sm-3 col-md-3'>
+    </div>
+		<div class='col-sm-3 col-md-3 col-sm-offset-9 col-md-offset-9' style="position:fixed;">
+      <center>
+        <div id='next'>
+          <a class='tp' onclick='nextWord()'>
+            <i class="turnpage fa fa-chevron-circle-right fa-5x" aria-hidden="true"></i>
+          </a>
+        </div>
+      </center>
+    </div>
+  </div>
+  </div>
+
+
+  <div class="modal fade" id="uploadModel" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <br><br><br><br><br><br><br><br>
+    <center>
+        <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+        <span class="sr-only">学习记录上传中</span>
+    </center>
+</div>
+	<br><br><br>
+{% endblock %}

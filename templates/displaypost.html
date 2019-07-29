@@ -1,0 +1,127 @@
+<!-- displaypost.html -->
+{% extends 'display_base.html' %}
+{% block title %} {{ post.title }}{% endblock %}
+{% block content %}
+
+<style>
+a {
+  cursor:pointer;
+  text-decoration:none;
+}
+a:hover{TEXT-DECORATION:none}
+</style>
+
+<script type="text/javascript">
+	function thumbup(obj) {
+ 	    $.ajax({
+   		url: "/blog/community/{{ article.author.name }}/{{ article.slug }}/thumbup",
+   		type: 'GET',
+   		data: {
+    			content_type: "BlogPost",
+			object_id: {{article.pk}},
+			is_thumb : obj
+   		},
+   		cache: false,
+   		success: function (data) {
+    			if (data['status'] == 'SUCCESS' || data['status'] == 'nochange'){
+     				var record =   $(document.getElementsByClassName("thumbup"))[0]
+     				var icon=  record.children[0]
+     				if (data["message"]== "1"){
+					record.style="color:#ff4000"
+					icon.style="color:#ff4000"
+     				}
+     				else {
+					record.style=""
+					icon.style=""
+     				}
+     				var thumbnum =   $(document.getElementsByClassName("thumbnum"))[0]
+				thumbnum.innerHTML = data['thumbnum'] 
+    			}
+			else{
+				alert(data['message']);
+			}
+   		},
+   		error: function (xhr) {
+    			console.log(xhr)
+   			}
+  		});
+  		return false;
+ 	    };
+		$(document).ready(function(){
+			thumbup(0);
+  		});
+    function createMyComment(){
+      newcomment = document.getElementById('mycomment');
+      newcomment.style.display="block";
+      return ;
+    };
+</script>
+
+
+<div class='panel panel-default'>
+	<div class='panel-body' style='background-color:#fff'>
+		<p style ='font-family:微软雅黑; font-size:12pt; font-weight:bold;'>
+		{{ article.title }}
+		<hr>
+		{{ article.body | linebreaks}}
+	</div>
+	<div class='panel-body' style='background-color:#efefef'>
+		<div class='row'>
+       <div class="col-lg-8" >
+        作者：<a href="/blog/community/{{ article.author.name }}">{{ article.author.name }}</a>
+        <br>
+        发表时间：{{ article.pub_date | date:"Y M d, h:m:s"}}
+       </div>
+       <br>
+       <div class="col-lg-2 col-lg-offset-2" >
+				  <a class="thumbup" onclick="thumbup(1)" ><i class="fa fa-thumbs-up"></i>&nbsp;点赞(<span class="thumbnum">{{article.thumb_num}}</span>)</a>&nbsp;&nbsp;</a>
+          <a href="javascript:void(0);" onclick="createMyComment()" ><i class="fa fa-comment"></i>&nbsp;评论</a>
+       </div>
+    </div>
+	</div>
+  <hr>
+  <div>
+    <center>
+		<p style ='font-family:微软雅黑; font-size:12pt; font-weight:bold;'>
+      评论区</p>
+    </center>
+  </div>
+  <hr>
+  {% for comment in blogcomments %}
+	  <div class='panel-body' style='background-color:#fff' >
+		    <div class='row'>
+          <div class="col-lg-9" >
+            <a href="/blog/community/{{ comment.author.name }}">{{comment.author.name }} ： </a>
+		        {{ comment.body}}
+          </div>
+          <div class="col-lg-3" style="padding-left:2cm;">
+		        {{ comment.pub_date}}
+          </div>
+        </div>
+	  </div>
+  {% endfor %}
+  <div id="mycomment" style='display:None;'>
+    <hr>
+     <form id="newcomment" class="comment-form" method="POST" action="/blog/postComment">
+       <input type="hidden" class="article_title" name="article" value="{{article.title}}"/>
+       <input type="hidden" class="article_author" name="author" value="{{article.author_id}}"/>
+       <input type="hidden" class="slug_id" name="slug" value="{{article.slug}}"/>
+       <input type="hidden" class="user_id" name="user_id" value="{{request.session.user_id}}"/>
+       <div class="row">
+           <div class="col-lg-11" style="padding-left:20px;">
+               <textarea class="col-lg-12" rows="6" style="border-radius: 4px;" placeholder="发表你的想法" name="body"></textarea>
+           </div>
+       </div>
+       <br>
+       <div class="row">
+           <div class="col-lg-3" style="padding-left:20px;">
+               <input type="submit" onclick="postMyComment()" class="btn btn-success" value="发表评论"/>
+           </div>
+       </div>
+     </form>
+  </div>
+</div>
+  
+	<br><br><br>
+{% endblock %}
+		

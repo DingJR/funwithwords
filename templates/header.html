@@ -1,0 +1,241 @@
+<!-- header.html -->
+{% if loginFailMessage == 1 %}
+	<script>
+		window.onload = function(){ 
+			$('#login').modal('show');
+		　　} 
+	</script>
+{% endif %}
+{% if registerFailMessage == True%}
+	<script>
+		window.onload = function(){ 
+			$('#register').modal('show');
+		　　} 
+	</script>
+{% endif %}
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">FunWithWord</a>
+    </div>
+    <div>
+        <ul class="nav navbar-nav">
+      <li {%if request.path|slice:'6' == '/index' or request.path|length == 1 %} class="active" {% endif %}><a href="/index">单词查询</a></li>
+	    <li {%if request.path|slice:'6' == '/affix' %} class="dropdown active" {% else %} class = "dropdown" {% endif %}>
+                <a href="/" class="dropdown-toggle" data-toggle="dropdown">
+                    词缀<b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li {%if request.path|slice:'6' == '/etyma' %} class="active" {% endif %}><a href="/etyma/">词根</a></li>
+                    <li class="divider"></li>
+                    <li {%if request.path|slice:'13' == '/affix/prefix' %} class="active" {% endif %}><a href="/affix/prefix">前缀</a></li>
+                    <li {%if request.path|slice:'13' == '/affix/suffix' %} class="active" {% endif %}><a href="/affix/suffix">后缀</a></li>
+                </ul>
+            </li>
+	    </li>
+    	    {% if request.session.is_login %}
+	    <li {%if request.path|slice:'8' == '/mywords' %} class="dropdown active" {% else %} class = "dropdown" {% endif %}>
+                <a href="/" class="dropdown-toggle" data-toggle="dropdown">
+                    我的单词 <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li {%if request.path|slice:'15' == '/mywords/review' %}class="active" {% endif %}><a href="/mywords/review">今日复习</a></li>
+                    <li {%if request.path|slice:'13' == '/mywords/book' %}class="active" {% endif %}><a href="/mywords/book">单词书</a></li>
+                </ul>
+            </li>
+    	    {% endif %}
+            <li {%if request.path|slice:'5' == '/blog' %} class="dropdown active" {% else %} class = "dropdown" {% endif %}>
+                <a href="/" class="dropdown-toggle" data-toggle="dropdown">
+                    单词社区 <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+    	    	    {% if request.session.is_login %}
+                    <li {%if request.path|slice:'12' == '/blog/mypost' %} class="active" {% endif %}><a href="/blog/mypost">我的博客</a></li>
+    	    	    {% endif %}
+                    <li class="divider"></li>
+                    <li {%if request.path|slice:'15' == '/blog/community' %} class="active" {% endif %}><a href="/blog/community">社区文章</a></li>
+                </ul>
+            </li>
+    {% if request.session.is_teacher and request.session.is_login %}
+      <li {%if request.path|slice:'7' == '/modify' %}
+class="active" {% endif %}><a href="/modify">错误订正</a></li>
+    {% endif %}
+        </ul>
+    <form class="navbar-form navbar-left" role="form search" action="/word/">
+	   <div class="input-group">
+                <input   type="text" class="form-control" id="searchHeader" name="searchHeader" onkeydown="complete(searchHeader)" placeholder="搜索单词" role='search'>
+                <span class="input-group-btn">
+                        <button type="submit button" class="btn btn-default" >
+                                Search
+                        </button>
+                </span>
+           </div>
+        </div>
+    </form>
+    <ul class="nav navbar-nav navbar-right">
+    {% if not  request.session.is_login %}
+	    <li>
+		    <a href="" data-toggle="modal" data-target="#login">
+			<span class="glyphicon glyphicon-log-in"></span>
+			<span id="loginText">登录</span>
+		    </a>
+	    </li>
+	    <li>
+	            <a href="" data-toggle="modal" data-target="#register">
+			<span class="glyphicon glyphicon-user"></span>
+			<span id="loginText">注册</span>
+		    </a>
+	    </li>
+    {% else %}
+    	    <li>
+                <a href="/" class="dropdown-toggle" data-toggle="dropdown">
+			{{ request.session.user_name }}<b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" style="padding-left:10px;">
+          <li>
+		      <a href="" data-toggle="modal" data-target="#settings">
+			      <span class="fa fa-user" aria-hidden="true"></span>
+			      <span id="settingsText">个人设置</span>
+			    </a></li>
+                    <li class="divider"></li>
+          <li }><a href="/logout/">
+			      <span class="glyphicon glyphicon-log-out"></span>
+			      <span id="logoutText">注销</span>
+		      </a></li}>
+                </ul>
+	    </li>
+    {% endif %}
+    </ul>
+
+
+    </div>
+    </div>
+</nav>
+    
+		<div id="register" class="modal fade" tabindex="-1" >
+	        <div class="modal-dialog">
+	            <div class="modal-content">
+	                <div class="modal-body">
+	                    <button class="close" data-dismiss="modal">
+	                        <span>&times;</span>
+	                    </button>
+	                </div>
+	                <div class="modal-title">
+	                    <h1 class="text-center">注册</h1>
+	                </div>
+	                <div class="modal-body">
+	                    <form class="form-group" method="POST" action="/register/">
+	                        <div class="form-group">
+	                            <label for="id_username">用户名</label>
+	                            <input name="username" class="form-control" type="text" placeholder="6-15位字母或数字">
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="id_password">密码</label>
+	                            <input name="password" class="form-control" type="password" placeholder="至少6位字母或数字">
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="id_passwordCheck">再次输入密码</label>
+	                            <input name="passwordCheck" class="form-control" type="password" placeholder="至少6位字母或数字">
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="email">邮箱</label>
+	                            <input name="email" class="form-control" type="email" placeholder="例如:***@***.com">
+	                        </div>
+				{% if message %}
+                  			<div class="alert alert-warning">{{ message }}</div>
+              			{% endif %}	
+	                        <div class="text-right">
+	                            <button class="btn btn-primary" type="submit" style="background-color: #3a8cd2b3;border: 0px solid transparent;">提交</button>
+	                            <button class="btn btn-danger" data-dismiss="modal" style="background-color: #fb5e5999;border: 0px solid transparent;">取消</button>
+	                        </div>
+	                        <a href="" data-toggle="modal" data-dismiss="modal" data-target="#login">
+	                            <font style="font-size: 13px;">已有账号？点我登录</font>
+	                        </a>
+	                    </form>
+	                </div>
+	            </div>
+	        </div>
+        </div>
+	 <div id="login" class="modal fade" tabindex="-1" >
+	        <div class="modal-dialog">
+	            <div class="modal-content">
+	                <div class="modal-body">
+	                    <button class="close" data-dismiss="modal">
+	                        <span>&times;</span>
+	                    </button>
+	                </div>
+	                <div class="modal-title">
+	                    <h1 class="text-center">登录</h1>
+	                </div>
+	                <div class="modal-body">
+	                    <form class="form-group" method="POST" action="/login/">
+                            <div class="form-group">
+                                <label for="id_email">邮箱</label>
+                                <input name="email" class="form-control" type="email" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="id_username">用户名</label>
+                                <input name="username" class="form-control" type="text" placeholder="">
+                            </div>
+                            <div class="form-group">
+                                <label for="id_password">密码</label>
+                                <input name="password" class="form-control" type="password" placeholder="">
+                            </div>
+			    {% if message %}
+                  		    <div class="alert alert-warning">{{ message }}</div>
+              		    {% endif %}	
+                            <div class="text-right">
+                                <button class="btn btn-primary" type="submit" style="background-color: #3a8cd2b3; border: 0px solid transparent;">登录</button>
+                                <button class="btn btn-danger" data-dismiss="modal" style="background-color: #fb5e5999;border: 0px solid transparent;">取消</button>
+                            </div>
+                            <a href="" data-toggle="modal" data-dismiss="modal" data-target="#register">
+                       			<font style="font-size: 13px;">还没有账号？点我注册</font>
+                            </a>
+	                    </form>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+
+	 <div id="settings" class="modal fade" tabindex="-1" >
+	        <div class="modal-dialog">
+	            <div class="modal-content">
+	                <div class="modal-body">
+	                    <button class="close" data-dismiss="modal">
+	                        <span>&times;</span>
+	                    </button>
+	                </div>
+	                <div class="modal-title">
+	                    <h1 class="text-center">个人设置</h1>
+	                </div>
+	                <div class="modal-body">
+	                    <form class="form-group" method="POST" action="/settings/">
+                            <div class="form-group">
+                                <label for="id_email">我的邮箱</label>
+                                <input name="email" class="form-control"
+                                                    type="email"
+                                                    value="{{request.session.user_email}}">
+                            </div>
+                            <div class="form-group">
+                                <label for="id_username">用户名</label>
+                                <input name="username" readonly="readonly" class="form-control"
+                                                       type="text"
+                                                       value="{{request.session.user_name}}">
+                            </div>
+                            <div class="form-group">
+                                <label for="id_password">密码</label>
+                                <input name="password" class="form-control"
+                                                       type="password"
+                                                       value="{{request.session.user_password}}">
+                            </div>
+                            <div class="text-right">
+                                <button class="btn btn-primary" type="submit" style="background-color: #3a8cd2b3; border:0px solid transparent;">修改</button>
+                                <button class="btn btn-danger" data-dismiss="modal" style="background-color: #fb5e5999;border: 0px solid transparent;">取消</button>
+                            </div>
+                            </a>
+	                    </form>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+

@@ -1,0 +1,54 @@
+<!-- editblog.html -->
+{% extends 'editblog_base.html' %}
+{% block title %} {{ post.title }}{% endblock %}
+{% block headmessage %}
+	<h3 style ='font-family:微软雅黑; font-size:16pt; font-weight:bold;'>社区文章列表</h3>
+{% endblock %}
+{% block content %}
+<style>
+#id_title{
+	border-radius:5px ;
+	width:700px;
+}
+#id_slug{
+	border-radius:5px ;
+	width:700px;
+}
+#id_body{
+	border-radius:0 5px ;
+	width:900px;
+	height:300px;
+}
+</style>
+<script>
+	$(document).ready(function(){
+		$("#clearblog").click(function(){
+			$("#id_body").val('');
+		})
+	});
+	{% if article %}
+	$(document).ready(function(){
+			$("#id_title").val('{{article.title}}');
+			$("#id_slug").val('{{article.slug}}');
+			$("#id_body").val('{{article.body|safe}}');
+	});
+	{% endif %}
+	{% if message %}
+        $(document).ready(function(){
+                alert('{{message}}');
+        });
+        {% endif %}
+</script>
+<form name='BlogPost' action='\blog\edit\post' method='POST'>
+	<input type='hidden' name='blogpostid' value='{{article.id}}' />
+	title<br>
+	{{ form.title}}<br><br>
+	slug<br>
+	{{ form.slug }}<br><br>
+	main body<br>
+	{{ form.body }}<br><br>
+	<button type="submit button" class="postblog btn btn-info">提交</button>
+	<button type="button" id="clearblog" class="btn btn-danger">清空</button>
+</form>
+{% endblock %}
+		
